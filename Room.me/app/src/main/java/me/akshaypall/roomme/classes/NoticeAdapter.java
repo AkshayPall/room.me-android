@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,8 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
         //changing the contents of a view
         holder.mTitle.setText(mNotices.get(position).getmTitle());
         holder.mDetails.setText(mNotices.get(position).getmDetails());
+
+        //TODO: format postdate
         holder.mPostDate.setText(mNotices.get(position).getTargetDate());
 
         if (mIsOnMainActivity){
@@ -87,6 +90,10 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
             //make button invisible
             holder.mEditButton.setVisibility(GONE);
             holder.mNotifyButton.setVisibility(GONE);
+
+            //truncate details text
+            holder.mDetails.setEllipsize(TextUtils.TruncateAt.END);
+            holder.mDetails.setSingleLine(true);
         }
     }
 

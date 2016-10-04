@@ -46,7 +46,8 @@ public class MainActivity extends AppCompatActivity
         //fake notice data (temporary)
         ArrayList<Notice> notices = new ArrayList<>();
         for (int i = 0; i < 5; i++)
-            notices.add(i, new Notice("Ayy"+i, "afsdsf---"+i, DateTime.now()));
+            notices.add(i, new Notice("Ayy"+i, "afsdsfdhjka j dhsakjdajk " +
+                    "h dksahd kashdjas dkj sajdahskjdhsak kjkdhjkhdak---"+i, DateTime.now()));
 
 
         /** Setup for Notice recyclerview && adapter **/
