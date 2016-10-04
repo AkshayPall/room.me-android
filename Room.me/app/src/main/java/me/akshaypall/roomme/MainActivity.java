@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         noticeView.setLayoutManager(layoutManager);
         //create and set adapter
-        NoticeAdapter adapter = new NoticeAdapter(notices);
+        NoticeAdapter adapter = new NoticeAdapter(notices, true, this);
         noticeView.setAdapter(adapter);
 
     }

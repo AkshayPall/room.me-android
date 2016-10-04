@@ -10,5 +10,10 @@
     <string name="settings">Settings</string>
     <string name="notice_title_placeholder_text">Notice Title $1</string>
     <string name="notice_item_date_placeholder">October 3rd, 2016</string>
-    <string name="details_2">Details $2!</string>
+    <string name="details_2">Details $2! Lorem ipsum test string. More details on the
+                            notice can be found here! The notify button below is for
+                            messaging your roommates. The edit button is for update the
+                            notice title, details, and target date!</string>
+    <string name="notice_notify_button">Notify</string>
+    <string name="notice_edit_button_text">Edit</string>
 </resources>

@@ -29,11 +29,12 @@ public class Notice {
         return mDetails;
     }
 
-    public DateTime getmPostedTime() {
-        return mPostedTime;
+    public String formatDateTime(DateTime dateTime) {
+        return ""+dateTime.getMonthOfYear()+" "+dateTime.getDayOfMonth()+" "+
+                dateTime.getHourOfDay()+":"+dateTime.getMinuteOfHour();
     }
 
-    public DateTime getmTargetTime() {
-        return mTargetTime;
+    public String getTargetDate() {
+        return formatDateTime(mTargetTime);
     }
 }
