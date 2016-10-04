@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import me.akshaypall.roomme.R;
 
@@ -21,10 +20,14 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
     ArrayList<Notice> mNotices = new ArrayList<>();
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        private final TextView title;
+        private final TextView mTitle;
+        private final TextView mPostDate;
+        private final TextView mDetails;
         public ViewHolder (View v){
             super(v);
-            title = (TextView)v.findViewById(R.id.item_notice_title);
+            mTitle = (TextView)v.findViewById(R.id.item_notice_title);
+            mPostDate = (TextView)v.findViewById(R.id.item_notice_pdate);
+            mDetails = (TextView)v.findViewById(R.id.item_notice_details);
         }
     }
 
@@ -46,7 +49,9 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         //changing the contents of a view
-        holder.title.setText(mNotices.get(position).getmTitle());
+        holder.mTitle.setText(mNotices.get(position).getmTitle());
+        holder.mDetails.setText(mNotices.get(position).getmDetails());
+        holder.mPostDate.setText(mNotices.get(position).getmPostedTime().toString());
     }
 
     @Override
