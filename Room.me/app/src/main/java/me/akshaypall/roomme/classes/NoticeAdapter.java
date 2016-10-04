@@ -21,10 +21,10 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
     ArrayList<Notice> mNotices = new ArrayList<>();
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView title;
-        public ViewHolder (TextView v){
+        private final TextView title;
+        public ViewHolder (View v){
             super(v);
-            title = v;
+            title = (TextView)v.findViewById(R.id.item_notice_title);
         }
     }
 
@@ -39,14 +39,14 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.notice_item, parent, false);
         //can set viewholders size, margins, padding, etc. here
 
-
-        return new ViewHolder((TextView) v);
+        ViewHolder vh = new ViewHolder(v);
+        return vh;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         //changing the contents of a view
-        holder.title.setText("Test22222");
+        holder.title.setText(mNotices.get(position).getmTitle());
     }
 
     @Override

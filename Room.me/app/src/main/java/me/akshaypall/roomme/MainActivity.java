@@ -15,6 +15,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.joda.time.DateTime;
+
+import java.util.ArrayList;
+
+import me.akshaypall.roomme.classes.Notice;
+import me.akshaypall.roomme.classes.NoticeAdapter;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -36,12 +43,20 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //fake notice data (temporary)
+        ArrayList<Notice> notices = new ArrayList<>();
+        for (int i = 0; i < 5; i++)
+            notices.add(i, new Notice("Ayy"+i, "afsdsf---"+i, DateTime.now()));
+
+
         /** Setup for Notice recyclerview && adapter **/
 
         RecyclerView noticeView = (RecyclerView)findViewById(R.id.main_notices_recyclerview);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         noticeView.setLayoutManager(layoutManager);
         //create and set adapter
+        NoticeAdapter adapter = new NoticeAdapter(notices);
+        noticeView.setAdapter(adapter);
 
     }
 

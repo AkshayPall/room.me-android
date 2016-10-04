@@ -13,7 +13,7 @@ public class Notice {
     private DateTime mTargetTime;   //Target date for notice (used to create event in
                                     //  other roommates calendars.
 
-    Notice(String title, String details, DateTime targetTime){
+    public Notice(String title, String details, DateTime targetTime){
         mTitle = title;
         mDetails = details;
         mPostedTime = DateTime.now();

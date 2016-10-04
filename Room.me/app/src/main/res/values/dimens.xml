@@ -6,4 +6,11 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="notice_card_elevation">4dp</dimen>
+    <dimen name="card_corner_radius">2dp</dimen>
+    <dimen name="notice_title_size">22sp</dimen>
+    <dimen name="notice_title_margins">8dp</dimen>
+    <dimen name="divider_height">1dp</dimen>
+    <dimen name="divider_width_margins">8dp</dimen>
+    <dimen name="notice_card_margin">8dp</dimen>
 </resources>
