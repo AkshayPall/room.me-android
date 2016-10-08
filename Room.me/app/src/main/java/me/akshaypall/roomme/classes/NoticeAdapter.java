@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import me.akshaypall.roomme.App;
 import me.akshaypall.roomme.R;
 
 import static android.view.View.GONE;
@@ -26,7 +27,6 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
     //List of notices saved here
     private ArrayList<Notice> mNotices = new ArrayList<>();
     private boolean mIsOnMainActivity;
-    private Context mContext;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private final CardView mCardView;
@@ -49,14 +49,12 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
         }
     }
 
-    public NoticeAdapter(ArrayList<Notice> notices, boolean isOnMainActivity, Context context){
+    public NoticeAdapter(ArrayList<Notice> notices, boolean isOnMainActivity){
         //Arguments required for adapter
         mNotices = notices;
 
         //if viewing notice list from Main Activity, do not show notify nor edit buttons
         mIsOnMainActivity = isOnMainActivity;
-
-        mContext = context;
     }
 
     @Override
@@ -75,16 +73,16 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
         holder.mTitle.setText(mNotices.get(position).getmTitle());
         holder.mDetails.setText(mNotices.get(position).getmDetails());
 
-        //TODO: format postdate
+        //set the date for the Notice to the relative date string
         holder.mPostDate.setText(mNotices.get(position).getTargetDate());
 
         if (mIsOnMainActivity){
-            //remove bottom margin for cardview
+            //remove bottom margin for cardview if in the truncated card view (for main activity)
             ViewGroup.MarginLayoutParams cardLayoutParams =
                     (ViewGroup.MarginLayoutParams) holder.mCardView.getLayoutParams();
             cardLayoutParams.setMargins(
-                    mContext.getResources().getDimensionPixelSize(R.dimen.notice_card_margin), 0,
-                    mContext.getResources().getDimensionPixelSize(R.dimen.notice_card_margin), 0);
+                    App.getAppContext().getResources().getDimensionPixelSize(R.dimen.notice_card_margin), 0,
+                    App.getAppContext().getResources().getDimensionPixelSize(R.dimen.notice_card_margin), 0);
             holder.mCardView.setLayoutParams(cardLayoutParams);
 
             //make button invisible

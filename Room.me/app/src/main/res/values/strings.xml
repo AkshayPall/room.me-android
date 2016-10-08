@@ -16,4 +16,5 @@
                             notice title, details, and target date!</string>
     <string name="notice_notify_button">Notify</string>
     <string name="notice_edit_button_text">Edit</string>
+    <string name="notice_datetime_now">Now!</string>
 </resources>

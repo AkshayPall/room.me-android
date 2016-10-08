@@ -3,6 +3,7 @@
     package="me.akshaypall.roomme">
 
     <application
+        android:name="me.akshaypall.roomme.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

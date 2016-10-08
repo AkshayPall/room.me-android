@@ -45,9 +45,15 @@ public class MainActivity extends AppCompatActivity
 
         //fake notice data (temporary)
         ArrayList<Notice> notices = new ArrayList<>();
-        for (int i = 0; i < 5; i++)
-            notices.add(i, new Notice("Ayy"+i, "afsdsfdhjka j dhsakjdajk " +
-                    "h dksahd kashdjas dkj sajdahskjdhsak kjkdhjkhdak---"+i, DateTime.now()));
+        for (int i = -5; i < 5; i++){
+            DateTime date = (i < 0) ? DateTime.now().minusDays((-i)*6) :
+                    DateTime.now().plusMinutes(i*6*Notice.MINUTES_IN_DAY);
+                    //to test relative datetime string (in past and future)
+
+            notices.add(i+5, new Notice("Ayy"+i, "afsdsfdhjka j dhsakjdajk " +
+                    "h dksahd kashdjas dkj sajdahskjdhsak kjkdhjkhdak---"+i,
+                    date));
+            }
 
 
         /** Setup for Notice recyclerview && adapter **/
@@ -56,7 +62,7 @@ public class MainActivity extends AppCompatActivity
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         noticeView.setLayoutManager(layoutManager);
         //create and set adapter
-        NoticeAdapter adapter = new NoticeAdapter(notices, true, this);
+        NoticeAdapter adapter = new NoticeAdapter(notices, true);
         noticeView.setAdapter(adapter);
 
     }
