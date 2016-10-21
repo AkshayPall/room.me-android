@@ -4,10 +4,12 @@
     android:id="@+id/activity_notice"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="me.akshaypall.roomme.NoticeActivity">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
+        android:transitionName="@string/notice_list_transition_name"
         android:scrollbars="vertical"
         android:elevation="@dimen/notice_card_elevation"
         android:id="@+id/notice_activity_recyclerview"

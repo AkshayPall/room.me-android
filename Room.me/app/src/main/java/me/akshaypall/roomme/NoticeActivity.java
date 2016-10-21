@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -45,5 +46,15 @@ public class NoticeActivity extends AppCompatActivity implements NoticeCardListe
     @Override
     public void clickedCard(View card) {
         Log.d(CLICKED_TAG, "Notice card clicked!");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.home:
+                supportFinishAfterTransition();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -1,10 +1,13 @@
 package me.akshaypall.roomme;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.internal.ParcelableSparseArray;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity
 
     public static final String NOTICE_CARDS_MAIN = "notices_main_to_notice_A";
     private ArrayList<Notice> mNotices;
+    private RecyclerView mNoticeView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +68,9 @@ public class MainActivity extends AppCompatActivity
 
         /** Setup for Notice recyclerview && adapter **/
 
-        RecyclerView noticeView = (RecyclerView)findViewById(R.id.main_notices_recyclerview);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        noticeView.setLayoutManager(layoutManager);
-        //create and set adapter
-        NoticeAdapter adapter = new NoticeAdapter(mNotices, true, this);
-        noticeView.setAdapter(adapter);
+        mNoticeView = (RecyclerView)findViewById(R.id.main_notices_recyclerview);
+        mNoticeView.setLayoutManager(new LinearLayoutManager(this));
+        mNoticeView.setAdapter(new NoticeAdapter(mNotices, true, this));
 
     }
 
@@ -131,6 +132,11 @@ public class MainActivity extends AppCompatActivity
         b.putParcelableArrayList(NOTICE_CARDS_MAIN, mNotices);
         i.putExtra(NOTICE_CARDS_MAIN, b);
         //TODO: start activity with transition of cards
-        startActivity(i);
+        ActivityOptionsCompat transitionOptions = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(this, (View)mNoticeView,
+                        this.getString(R.string.notice_list_transition_name));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            startActivity(i, transitionOptions.toBundle());
+        }
     }
 }
