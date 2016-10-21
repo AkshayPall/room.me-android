@@ -2,15 +2,21 @@ package me.akshaypall.roomme;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import java.util.ArrayList;
 
 import me.akshaypall.roomme.classes.Notice;
+import me.akshaypall.roomme.classes.NoticeAdapter;
+import me.akshaypall.roomme.classes.NoticeCardListener;
 
-public class NoticeActivity extends AppCompatActivity {
+public class NoticeActivity extends AppCompatActivity implements NoticeCardListener {
 
     private static final String TEST_TAG = "TEST INFO------";
+    private static final String CLICKED_TAG = "Clicked_Notice_Card";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +33,17 @@ public class NoticeActivity extends AppCompatActivity {
             notices = b.getParcelableArrayList(MainActivity.NOTICE_CARDS_MAIN);
         }
 
+        //print to console if notice cards passed
         Log.d(TEST_TAG,
                 notices.size() > 0 ? notices.get(0).getmTitle() : "NO NOTICES PASSED FROM MAIN");
+
+        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.notice_activity_recyclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new NoticeAdapter(notices, false, this));
+    }
+
+    @Override
+    public void clickedCard(View card) {
+        Log.d(CLICKED_TAG, "Notice card clicked!");
     }
 }
