@@ -1,6 +1,7 @@
 package me.akshaypall.roomme.classes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +28,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
     //List of notices saved here
     private ArrayList<Notice> mNotices = new ArrayList<>();
     private boolean mIsOnMainActivity;
+    private NoticeCardListener mListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private final CardView mCardView;
@@ -49,12 +51,15 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
         }
     }
 
-    public NoticeAdapter(ArrayList<Notice> notices, boolean isOnMainActivity){
+    public NoticeAdapter(ArrayList<Notice> notices, boolean isOnMainActivity, NoticeCardListener listener){
         //Arguments required for adapter
         mNotices = notices;
 
         //if viewing notice list from Main Activity, do not show notify nor edit buttons
         mIsOnMainActivity = isOnMainActivity;
+
+        //to watch for Notice card clicks
+        mListener = listener;
     }
 
     @Override
@@ -92,6 +97,13 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
             //truncate details text
             holder.mDetails.setEllipsize(TextUtils.TruncateAt.END);
             holder.mDetails.setSingleLine(true);
+
+            holder.mCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.clickedCard(v);
+                }
+            });
         }
     }
 

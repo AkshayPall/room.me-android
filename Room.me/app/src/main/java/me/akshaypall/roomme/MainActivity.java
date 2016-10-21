@@ -1,6 +1,8 @@
 package me.akshaypall.roomme;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.internal.ParcelableSparseArray;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,9 +23,13 @@ import java.util.ArrayList;
 
 import me.akshaypall.roomme.classes.Notice;
 import me.akshaypall.roomme.classes.NoticeAdapter;
+import me.akshaypall.roomme.classes.NoticeCardListener;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, NoticeCardListener {
+
+    public static final String NOTICE_CARDS_MAIN = "notices_main_to_notice_A";
+    private ArrayList<Notice> mNotices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +50,13 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //fake notice data (temporary)
-        ArrayList<Notice> notices = new ArrayList<>();
+        mNotices = new ArrayList<>();
         for (int i = -5; i < 5; i++){
             DateTime date = (i < 0) ? DateTime.now().minusDays((-i)*6) :
                     DateTime.now().plusMinutes(i*6*Notice.MINUTES_IN_DAY);
                     //to test relative datetime string (in past and future)
 
-            notices.add(i+5, new Notice("Ayy"+i, "afsdsfdhjka j dhsakjdajk " +
+            mNotices.add(i+5, new Notice("Ayy"+i, "afsdsfdhjka j dhsakjdajk " +
                     "h dksahd kashdjas dkj sajdahskjdhsak kjkdhjkhdak---"+i,
                     date));
             }
@@ -62,7 +68,7 @@ public class MainActivity extends AppCompatActivity
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         noticeView.setLayoutManager(layoutManager);
         //create and set adapter
-        NoticeAdapter adapter = new NoticeAdapter(notices, true);
+        NoticeAdapter adapter = new NoticeAdapter(mNotices, true, this);
         noticeView.setAdapter(adapter);
 
     }
@@ -116,5 +122,15 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void clickedCard(View card) {
+        Intent i = new Intent(this, NoticeActivity.class);
+        Bundle b = new Bundle();
+        b.putParcelableArrayList(NOTICE_CARDS_MAIN, mNotices);
+        i.putExtra(NOTICE_CARDS_MAIN, b);
+        //TODO: start activity with transition of cards
+        startActivity(i);
     }
 }
