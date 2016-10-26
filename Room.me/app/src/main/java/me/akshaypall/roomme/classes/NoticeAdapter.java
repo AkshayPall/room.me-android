@@ -38,11 +38,8 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
 
     //for animations:
     private float mCardX;
-    private float mCardY;
     private float mOrigX;
-    private float mOrigY;
     private float mLastX;
-    private float mLastY;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private final CardView mCardView;
@@ -128,23 +125,20 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
                         case MotionEvent.ACTION_DOWN:
                             Log.d(TOUCH, "pressed down view");
                             mCardX = v.getX();
-                            mCardY = v.getY();
                             mOrigX = v.getX();
-                            mOrigY = v.getY();
                             mLastX = event.getX();
-                            mLastY = event.getY();
                             break;
+                        case MotionEvent.ACTION_CANCEL:
                         case MotionEvent.ACTION_UP:
                             Log.d(TOUCH, "let go of card");
-                            resetCard(v, mOrigX, mOrigY);
+                            resetCard(v, mOrigX);
                             break;
                         case MotionEvent.ACTION_MOVE:
                             Log.d(TOUCH, "moved card");
                             mCardX += event.getX()-mLastX;
-                            mCardY += event.getY()-mLastY;
                             v.setX(mCardX);
-                            v.setY(mCardY);
                             break;
+
                     }
                     return true;
                 }
@@ -153,14 +147,12 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
         }
     }
 
-    private void resetCard(View v, float origX, float origY) {
+    private void resetCard(View v, float origX) {
         mCardX = origX;
-        mCardY = origY;
         v.animate()
                 .setDuration(200)
                 .setInterpolator(new OvershootInterpolator())
-                .x(mCardX)
-                .y(mCardY);
+                .x(mCardX);
     }
 
     @Override
