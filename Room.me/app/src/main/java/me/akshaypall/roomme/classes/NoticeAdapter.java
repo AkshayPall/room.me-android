@@ -3,13 +3,18 @@ package me.akshaypall.roomme.classes;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.SwipeDismissBehavior;
+import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.view.VelocityTrackerCompat;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
@@ -40,8 +45,9 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
     private float mCardX;
     private float mOrigX;
     private float mLastX;
+    private GestureDetector mGestureListener;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final CardView mCardView;
         //All views in notice card
         private final TextView mTitle;
@@ -51,18 +57,18 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
         private final Button mNotifyButton;
         private final Button mEditButton;
 
-        public ViewHolder (View v){
+        public ViewHolder(View v) {
             super(v);
-            mCardView = (CardView)v.findViewById(R.id.item_notice_cardview);
-            mTitle = (TextView)v.findViewById(R.id.item_notice_title);
-            mPostDate = (TextView)v.findViewById(R.id.item_notice_pdate);
-            mDetails = (TextView)v.findViewById(R.id.item_notice_details);
-            mNotifyButton = (Button)v.findViewById(R.id.item_notice_notify_button);
-            mEditButton = (Button)v.findViewById(R.id.item_notice_edit_button);
+            mCardView = (CardView) v.findViewById(R.id.item_notice_cardview);
+            mTitle = (TextView) v.findViewById(R.id.item_notice_title);
+            mPostDate = (TextView) v.findViewById(R.id.item_notice_pdate);
+            mDetails = (TextView) v.findViewById(R.id.item_notice_details);
+            mNotifyButton = (Button) v.findViewById(R.id.item_notice_notify_button);
+            mEditButton = (Button) v.findViewById(R.id.item_notice_edit_button);
         }
     }
 
-    public NoticeAdapter(ArrayList<Notice> notices, boolean isOnMainActivity, NoticeCardListener listener){
+    public NoticeAdapter(ArrayList<Notice> notices, boolean isOnMainActivity, NoticeCardListener listener) {
         //Arguments required for adapter
         mNotices = notices;
 
@@ -84,7 +90,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         //changing the contents of a view
         holder.mTitle.setText(mNotices.get(position).getmTitle());
         holder.mDetails.setText(mNotices.get(position).getmDetails());
@@ -92,7 +98,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
         //set the date for the Notice to the relative date string
         holder.mPostDate.setText(mNotices.get(position).getTargetDate());
 
-        if (mIsOnMainActivity){
+        if (mIsOnMainActivity) {
             //remove bottom margin for cardview if in the truncated card view (for main activity)
             ViewGroup.MarginLayoutParams cardLayoutParams =
                     (ViewGroup.MarginLayoutParams) holder.mCardView.getLayoutParams();
@@ -115,35 +121,40 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
                     mListener.clickedCard(v);
                 }
             });
-        } else { //for animation on notice activity only
-            //float xOr = holder.mCardView.getX();
-            //float yOr = holder.mCardView.getY();
+        } else {
+            mGestureListener = new GestureDetector(App.getAppContext(), new SwipeListener());
             holder.mCardView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()){
-                        case MotionEvent.ACTION_DOWN:
-                            Log.d(TOUCH, "pressed down view");
-                            mCardX = v.getX();
-                            mOrigX = v.getX();
-                            mLastX = event.getX();
-                            break;
-                        case MotionEvent.ACTION_CANCEL:
-                        case MotionEvent.ACTION_UP:
-                            Log.d(TOUCH, "let go of card");
-                            resetCard(v, mOrigX);
-                            break;
-                        case MotionEvent.ACTION_MOVE:
-                            Log.d(TOUCH, "moved card");
-                            mCardX += event.getX()-mLastX;
-                            v.setX(mCardX);
-                            break;
+                    if (mGestureListener.onTouchEvent(event)) {
+                        resetCard(v, mOrigX);
+                        mListener.swipedCard(v, position);
+                        return true;
+                    } else {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                Log.d(TOUCH, "pressed down view");
+                                mCardX = v.getX();
+                                mOrigX = v.getX();
+                                mLastX = event.getX();
+                                break;
+                            case MotionEvent.ACTION_CANCEL:
+                            case MotionEvent.ACTION_UP:
+                                Log.d(TOUCH, "let go of card");
+                                resetCard(v, mOrigX);
+                                break;
+                            case MotionEvent.ACTION_MOVE:
+                                Log.d(TOUCH, "moved card");
+                                mCardX += event.getX() - mLastX;
+                                v.setX(mCardX);
+                                break;
 
+                        }
+                        return true;
                     }
-                    return true;
                 }
             });
-            //holder.mCardView.startAnimation(new ScaleAnimation(xOr, xOr+100, yOr, yOr+100));
+
         }
     }
 
@@ -151,12 +162,38 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
         mCardX = origX;
         v.animate()
                 .setDuration(200)
-                .setInterpolator(new OvershootInterpolator())
+                .setInterpolator(new FastOutSlowInInterpolator())
                 .x(mCardX);
     }
 
     @Override
     public int getItemCount() {
         return mNotices.size();
+    }
+
+    private class SwipeListener extends GestureDetector.SimpleOnGestureListener {
+        private static final String TAG = "TAG";
+
+        /**
+         * @Override public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+         * if (e1 != null || e2 != null){
+         * Log.d(TAG, "Flung card");
+         * return true;
+         * } else {
+         * return false;
+         * }
+         * }
+         **/
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            if (e1 != null && e2 != null && mCardX != mOrigX) {
+                if (distanceX > 0) {
+                    Log.d(TAG, "Swiped card");
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

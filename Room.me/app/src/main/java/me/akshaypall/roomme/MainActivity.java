@@ -139,4 +139,9 @@ public class MainActivity extends AppCompatActivity
             startActivity(i, transitionOptions.toBundle());
         }
     }
+
+    @Override
+    public void swipedCard(View v, int position) {
+        //Nothing happens here, only used in NoticeActivity
+    }
 }

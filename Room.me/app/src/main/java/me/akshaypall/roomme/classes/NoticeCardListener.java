@@ -8,4 +8,5 @@ import android.view.View;
 
 public interface NoticeCardListener {
     void clickedCard(View card);
+    void swipedCard(View v, int position);
 }
